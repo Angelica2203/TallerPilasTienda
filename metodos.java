@@ -322,7 +322,7 @@ public class metodos
 
         while (!pila.isEmpty()) 
         {
-            Tienda temp = pila.pop();//Extrae el elemento de la pila
+            Tienda temp = pila.pop();//Extrae el elemento ultimo elemento de la pila
             while (!pilaAux.isEmpty() && pilaAux.peek().getCantidad() < temp.getCantidad()) //peek muestra el elemento que esta en la cima de la pila
             {
                 pila.push(pilaAux.pop()); //Extrae el elemento de la pila auxiliar y lo pasa a la pila original
