@@ -44,7 +44,7 @@ public class principal
                     met.VenderPrenda(pila);
                     break;
                 case 5:
-                    
+                    met.ConsultarStock(pila);
                     break;
                 default:
                     JOptionPane.showMessageDialog(null, "El programa ha terminado");

@@ -34,8 +34,26 @@ public class metodos
             entrada = JOptionPane.showInputDialog("Ingrese el precio (número válido):");
         }
         o.setPrecio(Double.parseDouble(entrada));
-        pila.push(o);
-        JOptionPane.showMessageDialog(null, "Repuesto ingresado correctamente");
+        return ValidarPrenda(pila, o);
+    }
+    public Stack<Tienda> ValidarPrenda(Stack<Tienda> pila, Tienda nuevaPrenda) 
+    {
+        boolean encontrado = false;
+        for (Tienda prenda : pila) 
+        {
+            if (prenda.getMarca().equalsIgnoreCase(nuevaPrenda.getMarca()) && prenda.getReferencia() == nuevaPrenda.getReferencia()) 
+            {
+                prenda.setCantidad(prenda.getCantidad() + nuevaPrenda.getCantidad());
+                encontrado = true;
+                JOptionPane.showMessageDialog(null, "La prenda ya existe, se ha actualizado la cantidad");
+                break;
+            }
+        }
+        if (!encontrado) 
+        {
+            pila.push(nuevaPrenda);
+            JOptionPane.showMessageDialog(null, "Prenda ingresada correctamente");
+        }
         MostrarPila(pila);
         return pila;
     }
@@ -60,6 +78,12 @@ public class metodos
         }
         System.out.println("--CONSULTAR-- \n" + "1.Por Marca\n" + "2.Por Referencia\n");
         int opt = sc.nextInt();
+        while (opt != 1 && opt != 2) 
+        {
+            System.out.println("Opción no válida. Por favor ingrese 1 o 2.");
+            opt = sc.nextInt();
+        }
+        boolean encontrado = false;
         String marca = "";
         int ref = 0;
         if (opt == 1) 
@@ -77,32 +101,32 @@ public class metodos
             {
                 if (prenda.getMarca().equalsIgnoreCase(marca)) 
                 {
+                    encontrado = true;
                     System.out.println("PRENDA ENCONTRADA\n" +
                                     "Marca: " + prenda.getMarca() + "\n" +
                                     "Referencia: " + prenda.getReferencia() + "\n" +
                                     "Cantidad: " + prenda.getCantidad() + "\n" +
                                     "Precio: " + prenda.getPrecio() + "\n");
                 } 
-                else
-                {
-                    System.out.println("Prenda no encontrada");
-                }
+                
             }
             else
             {
                 if (prenda.getReferencia() == ref) 
                 {
+                    encontrado = true;
                     System.out.println("PRENDA ENCONTRADA\n" +
                                     "Marca: " + prenda.getMarca() + "\n" +
                                     "Referencia: " + prenda.getReferencia() + "\n" +
                                     "Cantidad: " + prenda.getCantidad() + "\n" +
                                     "Precio: " + prenda.getPrecio() + "\n");
                 } 
-                else
-                {
-                    System.out.println("Prenda no encontrada");
-                }
             }
+        }
+        if (!encontrado) 
+        {
+            System.out.println("Prenda no encontrado");
+            return;
         }
     }
     public void ModificarPrenda(Stack<Tienda> pila) 
@@ -167,6 +191,11 @@ public class metodos
         }
         System.out.println("--CONSULTAR-- \n" + "1.Por Marca\n" + "2.Por Referencia\n");
         int opt = sc.nextInt();
+        while (opt != 1 && opt != 2) 
+        {
+            System.out.println("Opción no válida. Por favor ingrese 1 o 2.");
+            opt = sc.nextInt();
+        }
         String marca = "";
         int ref = 0;
         boolean encontrado = false;
@@ -227,5 +256,100 @@ public class metodos
             System.out.println("Prenda no encontrado");
             return;
         }
+    }
+    public void ConsultarStock(Stack<Tienda> pila) 
+    {
+        while (pila.isEmpty()) 
+        {
+            JOptionPane.showMessageDialog(null, "No hay prendas ingresadas");
+            return;
+        }
+        System.out.println("--CONSULTAR STOCK-- \n" + "1.Por Marca\n" + "2.Por Referencia\n");
+        int opt = sc.nextInt();
+        while (opt != 1 && opt != 2) 
+        {
+            System.out.println("Opción no válida. Por favor ingrese 1 o 2.");
+            opt = sc.nextInt();
+        }
+        String marca = "";
+        int ref = 0;
+        boolean encontrado = false;
+        if (opt == 1) 
+        {
+            System.out.println("Ingrese la marca a consultar");
+            marca = sc.next();
+        } else 
+        {
+            System.out.println("Ingrese la referencia a consultar");
+            ref = sc.nextInt();
+        }
+        for (Tienda prenda : pila) 
+        { 
+            if(opt == 1)
+            {
+                if (prenda.getMarca().equalsIgnoreCase(marca)) 
+                {
+                    encontrado = true;
+                    System.out.println("STOCK ENCONTRADO\n" +
+                                    "Cantidad: " + prenda.getCantidad() + "\n");
+                } 
+            }
+            else
+            {
+                if (prenda.getReferencia() == ref) 
+                {
+                    encontrado = true;
+                    System.out.println("STOCK ENCONTRADO\n" +
+                                    "Cantidad: " + prenda.getCantidad() + "\n");
+                } 
+            }
+        }
+        if (!encontrado) 
+        {
+            System.out.println("Prenda no encontrado");
+            return;
+        }
+    }
+    public void OrdenarPorCantidad(Stack<Tienda> pila) 
+    {
+        if (pila.isEmpty()) 
+        {
+            JOptionPane.showMessageDialog(null, "No hay prendas ingresadas");
+            return;
+        }
+
+        Stack<Tienda> pilaAux = new Stack<>();
+
+        while (!pila.isEmpty()) 
+        {
+            Tienda temp = pila.pop();//Extrae el elemento de la pila
+            while (!pilaAux.isEmpty() && pilaAux.peek().getCantidad() < temp.getCantidad()) //peek muestra el elemento que esta en la cima de la pila
+            {
+                pila.push(pilaAux.pop()); //Extrae el elemento de la pila auxiliar y lo pasa a la pila original
+            }
+            pilaAux.push(temp);
+        }
+
+        while (!pilaAux.isEmpty()) //pasa los elementos de la pila auxiliar a la pila original
+        {
+            pila.push(pilaAux.pop());
+        }
+        JOptionPane.showMessageDialog(null, "Prendas ordenadas por cantidad de mayor a menor");
+        MostrarPila(pila);
+    }
+    public void SumarYMostrarCantidades(Stack<Tienda> pila) 
+    {
+        if (pila.isEmpty()) 
+        {
+            JOptionPane.showMessageDialog(null, "No hay prendas ingresadas");
+            return;
+        }
+        int sumaTotal = 0;
+        for (Tienda prenda : pila) 
+        {
+            sumaTotal += prenda.getCantidad();
+        }
+
+        System.out.println("La suma total de las cantidades de las prendas es: " + sumaTotal);
     }
 }
