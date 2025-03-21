@@ -4,20 +4,37 @@ public class principal
 {
     public int Menu()
     {
-        int vrUsu; 
+        String input;
+        int vrUsu = 0; 
+        boolean validInput = false;
         do 
         {
-            vrUsu = Integer.parseInt(JOptionPane.showInputDialog("---------- MENU ----------\n" +
-                                                                 "1.Registrar Prenda\n" +
-                                                                 "2.Buscar Prenda\n" +
-                                                                 "3.Modificar Prenda\n" +
-                                                                 "4.Vender Prenda\n" + 
-                                                                 "5.Consultar Stock\n" + 
-                                                                 "6.Salir\n"));
-            if (vrUsu > 6 || vrUsu < 1)
-                JOptionPane.showMessageDialog(null,"Opcion no valido, reintente por favor");
+            input = JOptionPane.showInputDialog("---------- MENU ----------\n" +
+                                                "1.Registrar Prenda\n" +
+                                                "2.Buscar Prenda\n" +
+                                                "3.Modificar Prenda\n" +
+                                                "4.Vender Prenda\n" + 
+                                                "5.Consultar Stock\n" + 
+                                                "6.Salir\n");
+            if (input != null && input.matches("\\d+")) 
+            {
+                vrUsu = Integer.parseInt(input);
+                if (vrUsu >= 1 && vrUsu <= 6) 
+                {
+                    validInput = true;
+                } 
+                else 
+                {
+                    JOptionPane.showMessageDialog(null, "Opción no válida, reintente por favor");
+                }
+            } 
+            else 
+            {
+                JOptionPane.showMessageDialog(null, "Error: Debe ingresar un número válido.");
+            }
 
-        } while (vrUsu > 6 || vrUsu < 1);
+        } while (!validInput);
+
         return vrUsu;
     }
     public static void main(String[] args) 
